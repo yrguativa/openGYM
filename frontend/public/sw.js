@@ -38,7 +38,10 @@ self.addEventListener('fetch', e => {
     )))
   } else {
     e.respondWith(fetch(e.request).then(res => {
-      if (res.ok) caches.open(CACHE).then(c => c.put(e.request, res.clone()))
+      if (res.ok) {
+        const clone = res.clone()
+        caches.open(CACHE).then(c => c.put(e.request, clone))
+      }
       return res
     }).catch(() => caches.match(e.request).then(hit => hit || caches.match('index.html'))))
   }
